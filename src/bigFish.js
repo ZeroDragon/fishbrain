@@ -20,7 +20,7 @@ const saveProcess = queue(({database, data}, cb) => {
       const tmp = readFileSync(database)
       writeFile(tmpFile, tmp, callback)
     },
-    writeFile: (callback) => writeFile(database, JSON.stringify(data, false, 2), callback),
+    writeFile: (callback) => writeFile(database, JSON.stringify(data), callback),
     unlink: (callback) => unlink(tmpFile, callback)
   }, cb)
 }, 1)
