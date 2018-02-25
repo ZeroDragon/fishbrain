@@ -38,5 +38,6 @@
     "env": [
       "jest"
     ]
-  }
+  },
+  "runkitExampleFilename": "runkit-example.js"
 }

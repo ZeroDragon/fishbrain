@@ -67,7 +67,7 @@ _ttl is used to set a time to live (see examples)
 ## Examples
 ```
 const Fishbrain = require('fishbrain')
-const fish = new FishBrain('memory')
+const fish = new Fishbrain('memory')
 
 const id = fish.set({mykey: 'my value'})
 const row1 = fish.get({_id: id})
