@@ -4,7 +4,11 @@ const path = require('path')
 
 class Brain {
   constructor (filePath) {
-    this.filePath = path.join(__dirname, filePath)
+    if (filePath !== 'memory') {
+      this.filePath = path.join(__dirname, filePath)
+    } else {
+      this.filePath = filePath
+    }
     this.brain = upgradeFish(this.filePath)
   }
   set (data) {

@@ -3,6 +3,10 @@ const { queue, series } = require('async')
 const uuidv4 = require('uuid/v4')
 
 const saveProcess = queue(({database, data}, cb) => {
+  if (database === 'memory') {
+    cb()
+    return
+  }
   const tmpFile = `${database}${uuidv4()}.bak`
   series({
     checkFile: (callback) => {
@@ -22,6 +26,7 @@ const saveProcess = queue(({database, data}, cb) => {
 }, 1)
 
 const upgradeFish = (database) => {
+  if (database === 'memory') return []
   if (existsSync(database)) {
     return JSON.parse(readFileSync(database, {encoding: 'utf8'}) || '[]')
   }

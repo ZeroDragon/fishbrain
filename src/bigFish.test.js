@@ -23,6 +23,16 @@ describe('upgradeFish', () => {
 })
 
 describe('saveProcess', () => {
+  it('should skip when memoryDB', async () => {
+    const data = [{_id: 'something else', key: 'value'}]
+    saveProcess.push({database: 'memory', data})
+    await new Promise(resolve => {
+      saveProcess.drain = () => {
+        expect(upgradeFish('memory')).toEqual([])
+        resolve()
+      }
+    })
+  })
   it('should save when no dbFile', async () => {
     fs.unlinkSync('/myDb')
     const data = [{_id: 'something else', key: 'value'}]

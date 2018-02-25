@@ -16,6 +16,17 @@ const Brain = require('./main')
 let mockFish = null
 
 describe('start and insert', () => {
+  it('should create a database in memory only', () => {
+    const smallFish = new Brain('memory')
+    expect(upgradeFish).toHaveBeenCalledWith('memory')
+    expect(smallFish).toBeInstanceOf(Brain)
+    smallFish.set({testKey: 'value'})
+    expect(saveProcess.push).toHaveBeenCalled()
+    expect(smallFish.brain).toEqual([{
+      _id: expect.any(String),
+      testKey: 'value'
+    }])
+  })
   it('should create a database instance', () => {
     mockFish = new Brain('../database/test')
     expect(upgradeFish).toHaveBeenCalled()
