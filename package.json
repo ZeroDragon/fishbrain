@@ -6,7 +6,8 @@
   "scripts": {
     "test": "npx jest"
   },
-  "author": "ZeroDragon <npm@zerothedragon.com>",
+  "author": "ZeroDragon <npm@zerothedragon.com> (http://zerothedragon.com)",
+  "repository": "github:ZeroDragon/fishbrain",
   "license": "ISC",
   "dependencies": {
     "async": "^2.6.0",
