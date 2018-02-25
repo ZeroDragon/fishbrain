@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npx jest"
   },
-  "author": "",
+  "author": "ZeroDragon <npm@zerothedragon.com>",
   "license": "ISC",
   "dependencies": {
     "async": "^2.6.0",
