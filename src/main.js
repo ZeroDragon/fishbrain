@@ -5,7 +5,7 @@ const path = require('path')
 class Brain {
   constructor (filePath) {
     if (filePath !== 'memory') {
-      this.filePath = path.join(__dirname, filePath)
+      this.filePath = path.join(process.cwd(), filePath)
     } else {
       this.filePath = filePath
     }
