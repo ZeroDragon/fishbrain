@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1519528453524" clover="3.2.0">
-  <project timestamp="1519528453525" name="All files">
+<coverage generated="1519534234707" clover="3.2.0">
+  <project timestamp="1519534234707" name="All files">
     <metrics statements="77" coveredstatements="77" conditionals="33" coveredconditionals="33" methods="22" coveredmethods="22" elements="132" coveredelements="132" complexity="0" loc="77" ncloc="77" packages="1" files="2" classes="2">
       <file name="bigFish.js" path="/Users/cflores/Sites/fishBrain/src/bigFish.js">
         <metrics statements="40" coveredstatements="40" conditionals="19" coveredconditionals="19" methods="10" coveredmethods="10"/>
