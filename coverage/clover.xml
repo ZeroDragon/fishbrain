@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1519534268901" clover="3.2.0">
-  <project timestamp="1519534268902" name="All files">
-    <metrics statements="77" coveredstatements="77" conditionals="33" coveredconditionals="33" methods="22" coveredmethods="22" elements="132" coveredelements="132" complexity="0" loc="77" ncloc="77" packages="1" files="2" classes="2">
+<coverage generated="1521138568479" clover="3.2.0">
+  <project timestamp="1521138568480" name="All files">
+    <metrics statements="92" coveredstatements="92" conditionals="42" coveredconditionals="42" methods="23" coveredmethods="23" elements="157" coveredelements="157" complexity="0" loc="92" ncloc="92" packages="1" files="2" classes="2">
       <file name="bigFish.js" path="/Users/cflores/Sites/fishBrain/src/bigFish.js">
-        <metrics statements="40" coveredstatements="40" conditionals="19" coveredconditionals="19" methods="10" coveredmethods="10"/>
+        <metrics statements="44" coveredstatements="44" conditionals="21" coveredconditionals="21" methods="12" coveredmethods="12"/>
         <line num="1" count="2" type="stmt"/>
         <line num="2" count="2" type="stmt"/>
         <line num="3" count="2" type="stmt"/>
@@ -26,64 +26,79 @@
         <line num="31" count="4" type="cond" truecount="2" falsecount="0"/>
         <line num="33" count="1" type="stmt"/>
         <line num="36" count="2" type="cond" truecount="1" falsecount="0"/>
-        <line num="37" count="23" type="stmt"/>
-        <line num="38" count="23" type="cond" truecount="2" falsecount="0"/>
-        <line num="39" count="16" type="stmt"/>
-        <line num="40" count="16" type="stmt"/>
-        <line num="41" count="16" type="stmt"/>
-        <line num="42" count="26" type="stmt"/>
-        <line num="43" count="16" type="cond" truecount="2" falsecount="0"/>
-        <line num="44" count="8" type="stmt"/>
-        <line num="46" count="8" type="stmt"/>
+        <line num="37" count="28" type="stmt"/>
+        <line num="38" count="28" type="cond" truecount="2" falsecount="0"/>
+        <line num="39" count="20" type="stmt"/>
+        <line num="40" count="20" type="stmt"/>
+        <line num="41" count="20" type="stmt"/>
+        <line num="42" count="30" type="stmt"/>
+        <line num="43" count="20" type="cond" truecount="2" falsecount="0"/>
+        <line num="44" count="10" type="stmt"/>
+        <line num="46" count="10" type="stmt"/>
         <line num="50" count="2" type="stmt"/>
-        <line num="51" count="13" type="stmt"/>
-        <line num="52" count="13" type="stmt"/>
-        <line num="53" count="25" type="cond" truecount="2" falsecount="0"/>
+        <line num="51" count="15" type="stmt"/>
+        <line num="52" count="15" type="stmt"/>
+        <line num="53" count="28" type="cond" truecount="2" falsecount="0"/>
         <line num="54" count="1" type="stmt"/>
-        <line num="56" count="24" type="stmt"/>
-        <line num="59" count="13" type="cond" truecount="2" falsecount="0"/>
-        <line num="60" count="13" type="stmt"/>
+        <line num="56" count="27" type="stmt"/>
+        <line num="59" count="15" type="cond" truecount="2" falsecount="0"/>
+        <line num="60" count="15" type="stmt"/>
         <line num="63" count="2" type="stmt"/>
+        <line num="64" count="10" type="cond" truecount="2" falsecount="0"/>
+        <line num="65" count="3" type="stmt"/>
+        <line num="66" count="3" type="stmt"/>
+        <line num="74" count="2" type="stmt"/>
       </file>
       <file name="main.js" path="/Users/cflores/Sites/fishBrain/src/main.js">
-        <metrics statements="37" coveredstatements="37" conditionals="14" coveredconditionals="14" methods="12" coveredmethods="12"/>
+        <metrics statements="48" coveredstatements="48" conditionals="21" coveredconditionals="21" methods="11" coveredmethods="11"/>
         <line num="1" count="1" type="stmt"/>
         <line num="2" count="1" type="stmt"/>
         <line num="3" count="1" type="stmt"/>
-        <line num="7" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="8" count="1" type="stmt"/>
+        <line num="7" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="8" count="2" type="stmt"/>
         <line num="10" count="1" type="stmt"/>
-        <line num="12" count="2" type="stmt"/>
-        <line num="15" count="5" type="stmt"/>
-        <line num="16" count="5" type="cond" truecount="2" falsecount="0"/>
-        <line num="17" count="4" type="stmt"/>
-        <line num="18" count="2" type="cond" truecount="2" falsecount="0"/>
-        <line num="19" count="1" type="stmt"/>
+        <line num="12" count="3" type="stmt"/>
+        <line num="13" count="3" type="stmt"/>
+        <line num="16" count="7" type="stmt"/>
+        <line num="17" count="7" type="cond" truecount="2" falsecount="0"/>
+        <line num="18" count="7" type="stmt"/>
+        <line num="19" count="3" type="cond" truecount="2" falsecount="0"/>
         <line num="20" count="1" type="stmt"/>
-        <line num="22" count="2" type="stmt"/>
-        <line num="23" count="1" type="stmt"/>
-        <line num="24" count="1" type="stmt"/>
-        <line num="25" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
+        <line num="24" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="25" count="1" type="stmt"/>
         <line num="26" count="1" type="stmt"/>
-        <line num="30" count="3" type="stmt"/>
-        <line num="31" count="3" type="stmt"/>
-        <line num="33" count="5" type="stmt"/>
-        <line num="34" count="5" type="stmt"/>
-        <line num="37" count="11" type="stmt"/>
-        <line num="38" count="11" type="stmt"/>
-        <line num="39" count="11" type="cond" truecount="2" falsecount="0"/>
-        <line num="40" count="1" type="stmt"/>
-        <line num="41" count="1" type="stmt"/>
+        <line num="27" count="2" type="cond" truecount="2" falsecount="0"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="32" count="4" type="stmt"/>
+        <line num="33" count="4" type="stmt"/>
+        <line num="35" count="6" type="stmt"/>
+        <line num="36" count="6" type="stmt"/>
+        <line num="37" count="6" type="stmt"/>
+        <line num="40" count="13" type="stmt"/>
+        <line num="41" count="13" type="cond" truecount="2" falsecount="0"/>
         <line num="42" count="1" type="stmt"/>
-        <line num="43" count="1" type="stmt"/>
-        <line num="45" count="1" type="stmt"/>
-        <line num="49" count="3" type="cond" truecount="2" falsecount="0"/>
+        <line num="44" count="12" type="stmt"/>
+        <line num="46" count="13" type="stmt"/>
+        <line num="47" count="13" type="cond" truecount="2" falsecount="0"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
         <line num="50" count="1" type="stmt"/>
-        <line num="51" count="3" type="stmt"/>
-        <line num="52" count="1" type="stmt"/>
-        <line num="55" count="1" type="stmt"/>
-        <line num="56" count="1" type="stmt"/>
+        <line num="51" count="1" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="57" count="4" type="cond" truecount="2" falsecount="0"/>
+        <line num="58" count="2" type="stmt"/>
+        <line num="59" count="2" type="cond" truecount="2" falsecount="0"/>
         <line num="60" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="64" count="2" type="stmt"/>
+        <line num="65" count="4" type="stmt"/>
+        <line num="66" count="2" type="stmt"/>
+        <line num="67" count="2" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="71" count="1" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
       </file>
     </metrics>
   </project>

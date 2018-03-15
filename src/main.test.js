@@ -6,7 +6,8 @@ jest.mock('./bigFish', () => {
     },
     upgradeFish: jest.fn(() => []),
     querier: actualBigFish.querier,
-    forgetMe: actualBigFish.forgetMe
+    forgetMe: actualBigFish.forgetMe,
+    cleanMemory: actualBigFish.cleanMemory
   }
 })
 
@@ -16,6 +17,9 @@ const Brain = require('./main')
 let mockFish = null
 
 describe('start and insert', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+  })
   it('should create a database in memory only', () => {
     const smallFish = new Brain('memory')
     expect(upgradeFish).toHaveBeenCalledWith('memory')
@@ -26,6 +30,17 @@ describe('start and insert', () => {
       _id: expect.any(String),
       testKey: 'value'
     }])
+  })
+  it('should create a database instance no-shallow', () => {
+    mockFish = new Brain('../database/test', false)
+    expect(upgradeFish).toHaveBeenCalled()
+    expect(mockFish).toBeInstanceOf(Brain)
+    mockFish.set({testKey: 'value'})
+    expect(saveProcess.push).toHaveBeenCalled()
+    mockFish.get({})
+    expect(upgradeFish).toHaveBeenCalledTimes(2)
+    mockFish.del({testKey: 'value'})
+    expect(upgradeFish).toHaveBeenCalledTimes(3)
   })
   it('should create a database instance', () => {
     mockFish = new Brain('../database/test')
@@ -85,9 +100,16 @@ describe('update record', () => {
     expect(mockFish.get({}).length).toBe(2)
   })
   it('should update existing with custom id', () => {
-    const customId = mockFish.set({_id: 'custom', value: 'something'})
+    const customId = mockFish.set({_id: 'custom', value: 'something', _protected: true})
     expect(customId).toBe('custom')
     expect(mockFish.get({}).length).toBe(3)
+  })
+  it('should gracefull do nothing if record is protected', () => {
+    const customId = mockFish.set({_id: 'custom', value: 'something new'})
+    expect(customId).toBe('custom')
+    expect(mockFish.get({_id: 'custom'})).toEqual([{
+      _id: 'custom', value: 'something', _protected: true
+    }])
   })
 })
 

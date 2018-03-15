@@ -3,7 +3,7 @@ jest.mock('fs', () => {
   return mFs
 })
 const fs = require('fs')
-const { saveProcess, upgradeFish, querier, forgetMe } = require('./bigFish')
+const { saveProcess, upgradeFish, querier, forgetMe, cleanMemory } = require('./bigFish')
 
 describe('upgradeFish', () => {
   it('should return [] when no dbFile', () => {
@@ -96,5 +96,22 @@ describe('forgetMe', () => {
       {id: 1, other: true},
       {id: 2, other: true, _ttl: 'custom key'}
     ])
+  })
+})
+
+describe('cleanMemory', () => {
+  it('should return same value is is shallow', () => {
+    const input = {_id: 'test', val: 'bool', _ttl: 12345, _protected: true}
+    const result = cleanMemory([input], true)
+    expect(result).toEqual([input])
+  })
+  it('should return stripped values', () => {
+    const input = {_id: 'test', val: 'bool', _ttl: 12345, _protected: true}
+    const result = cleanMemory([input], false)
+    expect(result).toEqual([{
+      _id: 'test',
+      _ttl: 12345,
+      _protected: true
+    }])
   })
 })

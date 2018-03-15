@@ -60,9 +60,21 @@ const forgetMe = (data, {database}) => {
   return retval
 }
 
+const cleanMemory = (brain, isShallow) => {
+  if (isShallow) return brain
+  return brain.map(itm => {
+    return {
+      _id: itm._id,
+      _ttl: itm._ttl,
+      _protected: itm._protected
+    }
+  })
+}
+
 module.exports = {
   saveProcess,
   upgradeFish,
   querier,
-  forgetMe
+  forgetMe,
+  cleanMemory
 }
