@@ -29,6 +29,14 @@ const bigFish = new FishBrain('path_to_your_dbfile')
 ```
 Your dbfile can be anything, no extension required and inside its just a plain JSON text file.
 
+
+To keep a low memory footprint you can pass an optional shallow value when creating your brain  
+
+```
+const bigFish = new FishBrain('path_to_your_dbfile', false)
+```
+your DB in filesystem will still have all data, but your copy in memory will only have reserved values
+
 ## Create and Update
 ```
 set(object)
@@ -36,6 +44,7 @@ set(object)
 If no `_id` is provided in the object when setting the record, a new record will be created and a new id will be returned.  
 If an existing `_id` is provided, it will replace matching keys and insert new ones.  
 If an un-existing `_id` is provided, it will create a new record with that `_id`.  
+If the existing record has value `_protected`, it will not be updated.  
 
 ## Read
 ```
@@ -62,6 +71,8 @@ Will delete all records from DB
 ```
 _id is used to create or update records
 _ttl is used to set a time to live (see examples)
+_protected is used to protect a value from being updated, but you still can delete it
+
 ```
 
 ## Examples
