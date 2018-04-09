@@ -42,6 +42,22 @@ describe('start and insert', () => {
     mockFish.del({testKey: 'value'})
     expect(upgradeFish).toHaveBeenCalledTimes(3)
   })
+  it('should create a database instance with custom options', () => {
+    mockFish = new Brain('../database/test', {
+      shallow: false,
+      splitAt: 1000
+    })
+    expect(upgradeFish).toHaveBeenCalled()
+    expect(mockFish).toBeInstanceOf(Brain)
+    mockFish.set({_id: 'value'})
+    expect(saveProcess.push).toHaveBeenCalled()
+    mockFish.set({_id: 'value2'})
+    expect(saveProcess.push).toHaveBeenCalled()
+    mockFish.get({})
+    expect(upgradeFish).toHaveBeenCalledTimes(4)
+    mockFish.del({_id: 'value2'})
+    expect(upgradeFish).toHaveBeenCalledTimes(5)
+  })
   it('should create a database instance', () => {
     mockFish = new Brain('../database/test')
     expect(upgradeFish).toHaveBeenCalled()

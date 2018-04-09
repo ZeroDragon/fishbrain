@@ -3,19 +3,30 @@ const { saveProcess, upgradeFish, querier, forgetMe, cleanMemory } = require('./
 const path = require('path')
 
 class Brain {
-  constructor (filePath, shallow = true) {
+  constructor (filePath, opts = true) {
+    let options = opts
+    if(typeof opts !== 'object') {
+      options = {
+        shallow: opts,
+        splitAt: -1
+      }
+    }
     if (filePath !== 'memory') {
       this.filePath = path.join(process.cwd(), filePath)
     } else {
       this.filePath = filePath
     }
     this.brain = upgradeFish(this.filePath)
-    this.shallow = shallow
+    this.options = options
   }
   set (data) {
+    const { options } = this
     let newItm = null
     if (data._id) {
-      let existing = this.brain.find(({_id}) => _id === data._id)
+      let brain = this.brain
+      if (!options.shallow)
+        brain = forgetMe(upgradeFish(this.filePath), {database: this.filePath})
+      let existing = brain.find(({_id}) => _id === data._id)
       if (!existing) {
         newItm = JSON.parse(JSON.stringify(data))
         this.brain.push(newItm)
@@ -33,12 +44,13 @@ class Brain {
       this.brain.push(newItm)
     }
     saveProcess.push({database: this.filePath, data: this.brain})
-    this.brain = cleanMemory(this.brain, this.shallow)
+    this.brain = cleanMemory(this.brain, options.shallow)
     return newItm._id
   }
   get (query, projection = []) {
+    const { options } = this
     let brain = []
-    if (!this.shallow) {
+    if (!options.shallow) {
       brain = forgetMe(upgradeFish(this.filePath), {database: this.filePath})
     } else {
       brain = forgetMe(this.brain, {database: this.filePath})
@@ -55,8 +67,9 @@ class Brain {
   }
   del (query = {}) {
     if (Object.keys(query).length === 0) return
+    const { options } = this
     let brain = []
-    if (!this.shallow) {
+    if (!options.shallow) {
       brain = upgradeFish(this.filePath)
     } else {
       brain = this.brain
@@ -64,7 +77,7 @@ class Brain {
     const toDelete = querier(brain, query).map(itm => itm._id)
     this.brain = this.brain.filter(itm => toDelete.indexOf(itm._id) === -1)
     saveProcess.push({database: this.filePath, data: this.brain})
-    this.brain = cleanMemory(this.brain, this.shallow)
+    this.brain = cleanMemory(this.brain, options.shallow)
   }
   flush () {
     this.brain = []
