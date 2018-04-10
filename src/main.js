@@ -1,34 +1,67 @@
 const uuidv4 = require('uuid/v4')
-const { saveProcess, upgradeFish, querier, forgetMe, cleanMemory } = require('./bigFish')
+const { cleanData, realSaveProcess, saveProcess, upgradeFish, querier, forgetMe } = require('./bigFish')
+const fs = require('fs')
 const path = require('path')
 
 class Brain {
-  constructor (filePath, opts = {shallow: true, splitAt: -1}) {
-    let options = opts
-    if (typeof opts !== 'object') {
-      options = {
-        shallow: opts,
-        splitAt: -1
-      }
+  constructor (filePath, opts) {
+    let options = {splitAt: -1, acumSize: 0}
+    if (opts) {
+      options = Object.assign(options, opts)
     }
+    this.realConst(filePath, options)
+  }
+  realConst (filePath, opts) {
+    let options = opts
+    this.filePath = filePath
+    this.realFilePath = filePath
     if (filePath !== 'memory') {
-      let fp = filePath
-      this.id = uuidv4()
-      if (options.splitAt !== -1) fp = `${fp}_${this.id}`
-      this.filePath = path.join(process.cwd(), fp)
+      this.filePath = path.join(process.cwd(), this.realFilePath)
     } else {
       this.filePath = filePath
     }
     this.brain = upgradeFish(this.filePath)
     this.options = options
+    saveProcess.drain = () => {
+      const files = fs.readdirSync(path.dirname(this.realFilePath))
+      let originalFile = files.find(file => file.indexOf('.part') === -1)
+      originalFile = path.join(path.dirname(this.realFilePath), originalFile)
+      const init = JSON.parse(fs.readFileSync(originalFile, {encoding: 'utf8'}))
+      let acum = files.filter(file => file.indexOf('.part') !== -1)
+      if (acum.length === 0) {
+        if (this.finished) this.finished()
+        return
+      }
+      acum = acum
+        .map(file => {
+          const rawFile = fs.readFileSync(
+            path.join(
+              path.dirname(this.realFilePath), file
+            ),
+            {encoding: 'utf8'}
+          )
+          return JSON.parse(rawFile)
+        })
+        .reduce((prev, current) => prev.concat(current), init)
+      acum = cleanData(acum)
+      realSaveProcess({database: originalFile, data: acum}, () => {
+        files
+          .filter(file => file.indexOf('.part') !== -1)
+          .forEach(file => {
+            fs.unlinkSync(
+              path.join(
+                path.dirname(this.realFilePath), file
+              )
+            )
+          })
+        if (this.finished) this.finished()
+      })
+    }
   }
   set (data) {
     const { options } = this
     let newItm = null
     let brain = this.brain
-    if (!options.shallow) {
-      brain = forgetMe(upgradeFish(this.filePath), {database: this.filePath})
-    }
     if (data._id) {
       let existing = brain.find(({_id}) => _id === data._id)
       if (!existing) {
@@ -49,24 +82,19 @@ class Brain {
     }
     saveProcess.push({database: this.filePath, data: brain})
     if (brain.length === options.splitAt) {
-      const filePath = this.filePath.replace(`_${this.id}`, '')
-      const realBrain = new Brain(filePath, {shallow: true, splitAt: -1})
-      brain.forEach(itm => {
-        realBrain.set(itm)
-      })
-      brain = []
+      this.options.acumSize += brain.length
+      let index = parseInt(this.realFilePath.split('.part.').pop(), 10) || 0
+      index = `000000${index + 1}`.slice(-6)
+      const rFile = this.realFilePath.split('.part.')[0]
+      this.realConst(`${rFile}.part.${index}`, this.options)
+      return newItm._id
     }
-    this.brain = cleanMemory(brain, options.shallow)
+    this.brain = brain
     return newItm._id
   }
   get (query, projection = []) {
-    const { options } = this
     let brain = []
-    if (!options.shallow) {
-      brain = forgetMe(upgradeFish(this.filePath), {database: this.filePath})
-    } else {
-      brain = forgetMe(this.brain, {database: this.filePath})
-    }
+    brain = forgetMe(this.brain, {database: this.filePath})
     const data = querier(brain, query)
     if (projection.length === 0) return JSON.parse(JSON.stringify(data))
     return data.map(itm => {
@@ -79,17 +107,11 @@ class Brain {
   }
   del (query = {}) {
     if (Object.keys(query).length === 0) return
-    const { options } = this
-    let brain = []
-    if (!options.shallow) {
-      brain = upgradeFish(this.filePath)
-    } else {
-      brain = this.brain
-    }
+    let brain = this.brain
     const toDelete = querier(brain, query).map(itm => itm._id)
     this.brain = this.brain.filter(itm => toDelete.indexOf(itm._id) === -1)
     saveProcess.push({database: this.filePath, data: this.brain})
-    this.brain = cleanMemory(this.brain, options.shallow)
+    this.brain = this.brain
   }
   flush () {
     this.brain = []

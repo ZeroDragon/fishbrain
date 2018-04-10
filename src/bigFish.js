@@ -2,7 +2,7 @@ const { writeFile, readFileSync, unlink, existsSync } = require('fs')
 const { queue, series } = require('async')
 const uuidv4 = require('uuid/v4')
 
-const saveProcess = queue(({database, data}, cb) => {
+const realSaveProcess = ({database, data}, cb) => {
   if (database === 'memory') {
     cb()
     return
@@ -23,6 +23,10 @@ const saveProcess = queue(({database, data}, cb) => {
     writeFile: (callback) => writeFile(database, JSON.stringify(data), callback),
     unlink: (callback) => unlink(tmpFile, callback)
   }, cb)
+}
+
+const saveProcess = queue(({database, data}, cb) => {
+  realSaveProcess({database, data}, cb)
 }, 1)
 
 const upgradeFish = (database) => {
@@ -60,22 +64,23 @@ const forgetMe = (data, {database}) => {
   return retval
 }
 
-const cleanMemory = (brain, isShallow) => {
-  if (isShallow) return brain
-  const r = brain.map(itm => {
-    return {
-      _id: itm._id,
-      _ttl: itm._ttl,
-      _protected: itm._protected
-    }
+const cleanData = data => {
+  let d = JSON.parse(JSON.stringify(data))
+  d.sort((a, b) => b._created - a._created)
+  const t = {}
+  data.forEach(item => {
+    t[item._id] = item
   })
-  return r
+  return Object.keys(t).map(key => {
+    return t[key]
+  })
 }
 
 module.exports = {
+  realSaveProcess,
   saveProcess,
   upgradeFish,
   querier,
   forgetMe,
-  cleanMemory
+  cleanData
 }
