@@ -3,16 +3,19 @@ const { saveProcess, upgradeFish, querier, forgetMe, cleanMemory } = require('./
 const path = require('path')
 
 class Brain {
-  constructor (filePath, opts = true) {
+  constructor (filePath, opts = {shallow: true, splitAt: -1}) {
     let options = opts
-    if(typeof opts !== 'object') {
+    if (typeof opts !== 'object') {
       options = {
         shallow: opts,
         splitAt: -1
       }
     }
     if (filePath !== 'memory') {
-      this.filePath = path.join(process.cwd(), filePath)
+      let fp = filePath
+      this.id = uuidv4()
+      if (options.splitAt !== -1) fp = `${fp}_${this.id}`
+      this.filePath = path.join(process.cwd(), fp)
     } else {
       this.filePath = filePath
     }
@@ -22,29 +25,38 @@ class Brain {
   set (data) {
     const { options } = this
     let newItm = null
+    let brain = this.brain
+    if (!options.shallow) {
+      brain = forgetMe(upgradeFish(this.filePath), {database: this.filePath})
+    }
     if (data._id) {
-      let brain = this.brain
-      if (!options.shallow)
-        brain = forgetMe(upgradeFish(this.filePath), {database: this.filePath})
       let existing = brain.find(({_id}) => _id === data._id)
       if (!existing) {
         newItm = JSON.parse(JSON.stringify(data))
-        this.brain.push(newItm)
+        brain.push(newItm)
       } else {
         existing = JSON.parse(JSON.stringify(existing))
         if (existing._protected === true) return existing._id
         newItm = JSON.parse(JSON.stringify(Object.assign(existing, data)))
-        this.brain = this.brain.map(itm => {
+        brain = brain.map(itm => {
           if (itm._id === data._id) return existing
           return itm
         })
       }
     } else {
       newItm = Object.assign({_id: uuidv4()}, JSON.parse(JSON.stringify(data)))
-      this.brain.push(newItm)
+      brain.push(newItm)
     }
-    saveProcess.push({database: this.filePath, data: this.brain})
-    this.brain = cleanMemory(this.brain, options.shallow)
+    saveProcess.push({database: this.filePath, data: brain})
+    if (brain.length === options.splitAt) {
+      const filePath = this.filePath.replace(`_${this.id}`, '')
+      const realBrain = new Brain(filePath, {shallow: true, splitAt: -1})
+      brain.forEach(itm => {
+        realBrain.set(itm)
+      })
+      brain = []
+    }
+    this.brain = cleanMemory(brain, options.shallow)
     return newItm._id
   }
   get (query, projection = []) {

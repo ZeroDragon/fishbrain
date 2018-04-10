@@ -35,28 +35,28 @@ describe('start and insert', () => {
     mockFish = new Brain('../database/test', false)
     expect(upgradeFish).toHaveBeenCalled()
     expect(mockFish).toBeInstanceOf(Brain)
-    mockFish.set({testKey: 'value'})
+    mockFish.set({_id: 'value'})
     expect(saveProcess.push).toHaveBeenCalled()
     mockFish.get({})
-    expect(upgradeFish).toHaveBeenCalledTimes(2)
-    mockFish.del({testKey: 'value'})
     expect(upgradeFish).toHaveBeenCalledTimes(3)
+    mockFish.del({_id: 'value'})
+    expect(upgradeFish).toHaveBeenCalledTimes(4)
   })
   it('should create a database instance with custom options', () => {
     mockFish = new Brain('../database/test', {
-      shallow: false,
-      splitAt: 1000
+      shallow: true,
+      splitAt: 3
     })
     expect(upgradeFish).toHaveBeenCalled()
     expect(mockFish).toBeInstanceOf(Brain)
-    mockFish.set({_id: 'value'})
-    expect(saveProcess.push).toHaveBeenCalled()
-    mockFish.set({_id: 'value2'})
-    expect(saveProcess.push).toHaveBeenCalled()
-    mockFish.get({})
-    expect(upgradeFish).toHaveBeenCalledTimes(4)
-    mockFish.del({_id: 'value2'})
-    expect(upgradeFish).toHaveBeenCalledTimes(5)
+    mockFish.set({'key': 'value'})
+    expect(mockFish.get({}).length).toBe(1)
+
+    mockFish.set({'key': 'value'})
+    expect(mockFish.get({}).length).toBe(2)
+
+    mockFish.set({'key': 'value'})
+    expect(mockFish.get({}).length).toBe(0)
   })
   it('should create a database instance', () => {
     mockFish = new Brain('../database/test')

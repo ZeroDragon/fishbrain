@@ -62,13 +62,14 @@ const forgetMe = (data, {database}) => {
 
 const cleanMemory = (brain, isShallow) => {
   if (isShallow) return brain
-  return brain.map(itm => {
+  const r = brain.map(itm => {
     return {
       _id: itm._id,
       _ttl: itm._ttl,
       _protected: itm._protected
     }
   })
+  return r
 }
 
 module.exports = {
