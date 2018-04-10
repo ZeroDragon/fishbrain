@@ -23,20 +23,22 @@ class Brain {
     this.brain = upgradeFish(this.filePath)
     this.options = options
     saveProcess.drain = () => {
-      const files = fs.readdirSync(path.dirname(this.realFilePath))
-      let originalFile = files.find(file => file.indexOf('.part') === -1)
-      originalFile = path.join(path.dirname(this.realFilePath), originalFile)
+      const dirName = path.dirname(this.filePath)
+      const files = fs.readdirSync(dirName)
+      const originalFileName = path.basename(this.realFilePath).split('.part')[0]
+      const originalFile = path.join(path.dirname(this.filePath), originalFileName)
       const init = JSON.parse(fs.readFileSync(originalFile, {encoding: 'utf8'}))
-      let acum = files.filter(file => file.indexOf('.part') !== -1)
+      let acum = files
+        .filter(file => file.indexOf(originalFileName) !== -1)
+        .filter(file => file.indexOf('.part') !== -1)
       if (acum.length === 0) {
         if (this.finished) this.finished()
-        return
       }
       acum = acum
         .map(file => {
           const rawFile = fs.readFileSync(
             path.join(
-              path.dirname(this.realFilePath), file
+              path.dirname(this.filePath), file
             ),
             {encoding: 'utf8'}
           )
@@ -46,11 +48,12 @@ class Brain {
       acum = cleanData(acum)
       realSaveProcess({database: originalFile, data: acum}, () => {
         files
+          .filter(file => file.indexOf(originalFileName) !== -1)
           .filter(file => file.indexOf('.part') !== -1)
           .forEach(file => {
             fs.unlinkSync(
               path.join(
-                path.dirname(this.realFilePath), file
+                path.dirname(this.filePath), file
               )
             )
           })
