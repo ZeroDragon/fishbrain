@@ -27,7 +27,12 @@ class Brain {
       const files = fs.readdirSync(dirName)
       const originalFileName = path.basename(this.realFilePath).split('.part')[0]
       const originalFile = path.join(path.dirname(this.filePath), originalFileName)
-      const init = JSON.parse(fs.readFileSync(originalFile, {encoding: 'utf8'}))
+      let init = null
+      try {
+        init = JSON.parse(fs.readFileSync(originalFile, {encoding: 'utf8'}))
+      } catch (e) {
+        return
+      }
       let acum = files
         .filter(file => file.indexOf(originalFileName) !== -1)
         .filter(file => file.indexOf('.part') !== -1)
